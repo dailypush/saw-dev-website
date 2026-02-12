@@ -636,8 +636,8 @@ code,
 }
 
 .ripsaw-wheel {
-  width: 132px;
-  height: 132px;
+  width: 124px;
+  height: 124px;
   border-radius: 50%;
   border: 1px solid #4b6ea0;
   background:
@@ -939,8 +939,8 @@ body.blade-engaged .ripsaw-wheel {
   }
 
   .ripsaw-wheel {
-    width: 112px;
-    height: 112px;
+    width: 104px;
+    height: 104px;
   }
 
   .ripsaw-teeth .tooth:nth-child(1) { transform: rotate(0deg) translateY(-59px); }

@@ -62,6 +62,7 @@ const terminalFeedback = document.getElementById("terminal-feedback");
 const playground = document.getElementById("playground");
 const projectGrid = document.getElementById("project-grid");
 const projectSource = document.getElementById("project-source");
+const projectSynced = document.getElementById("project-synced");
 const projectKeys = document.getElementById("project-keys");
 const funBuilds = document.getElementById("fun-builds");
 
@@ -102,9 +103,10 @@ function smoothBehavior() {
   return prefersReducedMotion ? "auto" : "smooth";
 }
 
-function updateProjectMeta(sourceLabel) {
+function updateProjectMeta(sourceLabel, syncedAt) {
   const keys = Object.keys(projects);
   projectSource.textContent = `Source: ${sourceLabel}`;
+  projectSynced.textContent = `Last synced: ${syncedAt || "local runtime"}`;
   projectKeys.innerHTML = `Keys: ${keys.map((key) => `<code>${key}</code>`).join(", ")}`;
 }
 
@@ -280,9 +282,9 @@ async function loadProjectsFromStaticData(showStatus = false) {
     }
 
     projects = Object.fromEntries(normalized.map((project) => [project.key, project]));
-    const generatedAt = payload && payload.generated_at ? ` (${payload.generated_at})` : "";
-    const sourceLabel = payload && payload.source ? `${payload.source}${generatedAt}` : PROJECT_DATA_SOURCE.label;
-    updateProjectMeta(sourceLabel);
+    const sourceLabel = payload && payload.source ? payload.source : PROJECT_DATA_SOURCE.label;
+    const syncedAt = payload && payload.generated_at ? payload.generated_at : "workflow data";
+    updateProjectMeta(sourceLabel, syncedAt);
     renderProjectCards();
 
     if (showStatus) {

@@ -16,6 +16,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate overrides JSON
+        run: |
+          set -euo pipefail
+
+          if [ ! -f assets/project-overrides.json ]; then
+            echo "assets/project-overrides.json not found; continuing without overrides."
+            exit 0
+          fi
+
+          jq empty assets/project-overrides.json
+
+          jq -e '
+            type == "array"
+            and all(.[]; has("key") and (.key | type == "string") and (.key | length > 0))
+          ' assets/project-overrides.json > /dev/null
+
+          jq -e '
+            ([.[].key] | length) == ([.[].key] | unique | length)
+          ' assets/project-overrides.json > /dev/null
+
       - name: Generate assets/projects.json
         env:
           GH_USER: Dailypush

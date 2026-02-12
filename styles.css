@@ -318,6 +318,10 @@ code,
   color: #8ec0ea;
 }
 
+#project-synced {
+  color: #88d8b8;
+}
+
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));

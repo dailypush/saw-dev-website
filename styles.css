@@ -235,6 +235,26 @@ code,
   flex: 1;
 }
 
+.terminal-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.terminal-link {
+  border: 1px solid #335176;
+  border-radius: 8px;
+  padding: 0.42rem 0.6rem;
+  text-decoration: none;
+  color: #cde8ff;
+  background: #10233c;
+  font-size: 0.88rem;
+}
+
+.terminal-link:hover {
+  background: #14315a;
+}
+
 .terminal-input {
   width: 100%;
   border: 1px solid #2a3a56;
@@ -266,6 +286,61 @@ code,
   max-width: 1120px;
   margin: 0 auto;
   padding: 1.2rem 1rem 3rem;
+}
+
+.about-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.2rem 1rem 3rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 1rem;
+}
+
+.about-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #121b2a, #0f1725);
+  padding: 0.95rem;
+  box-shadow: 0 12px 28px #00000033;
+}
+
+.about-card h2,
+.about-card h3 {
+  margin-top: 0;
+}
+
+.about-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--ink-1);
+}
+
+.about-list li + li {
+  margin-top: 0.4rem;
+}
+
+.about-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.about-link-chip {
+  border: 1px solid #3a5a83;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #cde8ff;
+  background: #10233c;
+  padding: 0.3rem 0.56rem;
+  font-size: 0.86rem;
+}
+
+.about-link-chip:hover {
+  background: #14315a;
 }
 
 .hero {
@@ -417,6 +492,8 @@ code,
 .card-open:focus-visible,
 .panel-close:focus-visible,
 .panel-links a:focus-visible,
+.terminal-link:focus-visible,
+.about-link-chip:focus-visible,
 .terminal-input:focus-visible {
   outline: 2px solid #7ed6ff;
   outline-offset: 2px;
@@ -572,6 +649,14 @@ code,
     align-items: stretch;
     gap: 0.4rem;
     min-height: auto;
+  }
+
+  .terminal-nav {
+    justify-content: flex-end;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
   }
 
   .prompt-label {

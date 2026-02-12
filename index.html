@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>saw.dev | Dev Playground</title>
+    <meta
+      name="description"
+      content="saw.dev terminal-first dev playground with fun project builds"
+    />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="boot-screen" class="boot-screen" aria-live="polite">
+      <div class="terminal-window" role="status" aria-label="Boot terminal">
+        <div class="terminal-titlebar">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="title">saw.dev://boot</span>
+        </div>
+        <pre id="boot-output" class="boot-output"></pre>
+        <div id="progress-wrap" class="progress-wrap hidden" aria-hidden="true">
+          <div class="progress-label">loading playground modules...</div>
+          <div class="progress-track" aria-hidden="true">
+            <div id="progress-bar" class="progress-bar"></div>
+          </div>
+        </div>
+        <pre id="ascii-logo" class="ascii-logo hidden" aria-hidden="true"></pre>
+      </div>
+      <div id="blade-reveal" class="blade-reveal hidden" aria-hidden="true">
+        <div class="blade"></div>
+        <div class="cut-line"></div>
+      </div>
+    </div>
+
+    <header id="terminal-header" class="terminal-header hidden">
+      <div class="terminal-header-inner">
+        <div class="prompt-label">saw.dev &gt;</div>
+        <form id="terminal-form" class="terminal-form" autocomplete="off">
+          <label class="sr-only" for="terminal-input">Terminal command</label>
+          <input
+            id="terminal-input"
+            class="terminal-input"
+            type="text"
+            placeholder="type a command (help)"
+            spellcheck="false"
+          />
+        </form>
+      </div>
+      <div id="terminal-feedback" class="terminal-feedback" aria-live="polite"></div>
+    </header>
+
+    <main id="playground" class="playground hidden">
+      <section class="hero" id="top">
+        <p class="hero-kicker">terminal-first dev playground</p>
+        <h1>Welcome to saw.dev</h1>
+        <p>
+          Small experiments, weird tools, and side quests. Use terminal commands
+          or click into any build.
+        </p>
+      </section>
+
+      <section id="fun-builds" class="section">
+        <div class="section-head">
+          <h2>🎮 Fun Builds</h2>
+          <p>Keys: <code>twitchbot</code>, <code>candy</code>, <code>overlay</code></p>
+        </div>
+
+        <div id="project-grid" class="project-grid"></div>
+      </section>
+    </main>
+
+    <div id="panel-backdrop" class="panel-backdrop" hidden></div>
+    <aside
+      id="project-panel"
+      class="project-panel"
+      aria-hidden="true"
+      aria-labelledby="panel-title"
+    >
+      <button id="panel-close" class="panel-close" type="button" aria-label="Close panel">
+        ×
+      </button>
+      <div class="panel-scroll">
+        <p id="panel-status" class="panel-status"></p>
+        <h3 id="panel-title"></h3>
+        <p id="panel-description"></p>
+
+        <div class="panel-block">
+          <h4>Why</h4>
+          <p id="panel-why"></p>
+        </div>
+
+        <div class="panel-block">
+          <h4>Stack</h4>
+          <p id="panel-stack"></p>
+        </div>
+
+        <div class="panel-block panel-links">
+          <h4>Links</h4>
+          <a id="panel-github" href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a id="panel-demo" href="#" target="_blank" rel="noopener noreferrer">Demo</a>
+        </div>
+
+        <div class="panel-block dev-note">
+          <h4>Dev Note</h4>
+          <p id="panel-note"></p>
+        </div>
+      </div>
+    </aside>
+
+    <script src="app.js"></script>
+  </body>
+</html>

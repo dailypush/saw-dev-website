@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Saw blade favicon">
+  <rect width="64" height="64" rx="12" fill="#0e1625"/>
+  <g transform="translate(32 32)">
+    <circle r="18" fill="#9cc8f6"/>
+    <circle r="6" fill="#223955"/>
+    <path d="M0-24 4-18 0-20-4-18Z" fill="#d8ebff"/>
+    <path d="M17-17 18-12 15-14 12-12Z" fill="#d8ebff"/>
+    <path d="M24 0 18 4 20 0 18-4Z" fill="#d8ebff"/>
+    <path d="M17 17 12 18 14 15 12 12Z" fill="#d8ebff"/>
+    <path d="M0 24-4 18 0 20 4 18Z" fill="#d8ebff"/>
+    <path d="M-17 17-18 12-15 14-12 12Z" fill="#d8ebff"/>
+    <path d="M-24 0-18-4-20 0-18 4Z" fill="#d8ebff"/>
+    <path d="M-17-17-12-18-14-15-12-12Z" fill="#d8ebff"/>
+  </g>
+</svg>

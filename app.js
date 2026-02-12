@@ -44,6 +44,8 @@ const LOCAL_PROJECTS = {
 
 let projects = { ...LOCAL_PROJECTS };
 let lastPanelTrigger = null;
+const commandHistory = [];
+let commandHistoryIndex = -1;
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -97,6 +99,35 @@ const ascii = String.raw`
 
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function getOpenKeyFromUrl() {
+  const hash = window.location.hash || "";
+  const match = hash.match(/^#open=(.+)$/i);
+  return match ? decodeURIComponent(match[1]).trim().toLowerCase() : "";
+}
+
+function setOpenKeyInUrl(key) {
+  const nextHash = `#open=${encodeURIComponent(key)}`;
+  if (window.location.hash !== nextHash) {
+    history.replaceState({}, "", `${window.location.pathname}${window.location.search}${nextHash}`);
+  }
+}
+
+function clearOpenKeyInUrl() {
+  if (window.location.hash) {
+    history.replaceState({}, "", `${window.location.pathname}${window.location.search}`);
+  }
+}
+
+function maybeOpenFromUrl() {
+  const key = getOpenKeyFromUrl();
+  if (!key) {
+    return;
+  }
+  if (projects[key]) {
+    openPanel(key, terminalInput, { updateUrl: false, focusPanel: false });
+  }
 }
 
 function smoothBehavior() {
@@ -162,7 +193,8 @@ function setLinkState(anchor, href) {
   }
 }
 
-function openPanel(key, triggerEl) {
+function openPanel(key, triggerEl, options = {}) {
+  const { updateUrl = true, focusPanel = true } = options;
   const project = projects[key?.toLowerCase()];
   if (!project) {
     const firstKey = Object.keys(projects)[0] || "help";
@@ -185,11 +217,17 @@ function openPanel(key, triggerEl) {
   panel.classList.add("open");
   panelBackdrop.hidden = false;
   requestAnimationFrame(() => panelBackdrop.classList.add("visible"));
-  panelClose.focus();
+  if (focusPanel) {
+    panelClose.focus();
+  }
+  if (updateUrl) {
+    setOpenKeyInUrl(project.key);
+  }
   feedback(`Opened ${project.key} in the right panel.`);
 }
 
-function closePanel() {
+function closePanel(options = {}) {
+  const { updateUrl = true } = options;
   panel.classList.remove("open");
   panel.setAttribute("aria-hidden", "true");
   panelBackdrop.classList.remove("visible");
@@ -201,6 +239,10 @@ function closePanel() {
 
   if (lastPanelTrigger && typeof lastPanelTrigger.focus === "function") {
     lastPanelTrigger.focus();
+  }
+
+  if (updateUrl) {
+    clearOpenKeyInUrl();
   }
 }
 
@@ -286,12 +328,14 @@ async function loadProjectsFromStaticData(showStatus = false) {
     const syncedAt = payload && payload.generated_at ? payload.generated_at : "workflow data";
     updateProjectMeta(sourceLabel, syncedAt);
     renderProjectCards();
+    maybeOpenFromUrl();
 
     if (showStatus) {
       feedback(`Loaded ${normalized.length} project(s) from workflow data.`);
     }
   } catch {
     useLocalProjects("local fallback", showStatus ? "Using local project data (workflow file unavailable)." : "");
+    maybeOpenFromUrl();
   }
 }
 
@@ -346,6 +390,7 @@ async function runBootSequence() {
   terminalHeader.classList.remove("hidden");
   playground.classList.remove("hidden");
   terminalInput.focus();
+  maybeOpenFromUrl();
 }
 
 function handleCommand(rawInput) {
@@ -357,7 +402,7 @@ function handleCommand(rawInput) {
   const lower = input.toLowerCase();
 
   if (lower === "help") {
-    feedback("Commands: help, fun, playground, open <key>, repos, clear, sudo make fun");
+    feedback("Commands: help, fun, playground, open <key>, repos, clear, sudo make fun (history: up/down)");
     return;
   }
 
@@ -405,7 +450,32 @@ function handleCommand(rawInput) {
 
 terminalForm.addEventListener("submit", (event) => {
   event.preventDefault();
+  const submitted = terminalInput.value.trim();
+  if (submitted) {
+    commandHistory.push(submitted);
+    commandHistoryIndex = commandHistory.length;
+  }
   handleCommand(terminalInput.value);
+});
+
+terminalInput.addEventListener("keydown", (event) => {
+  if (event.key !== "ArrowUp" && event.key !== "ArrowDown") {
+    return;
+  }
+  if (!commandHistory.length) {
+    return;
+  }
+
+  event.preventDefault();
+
+  if (event.key === "ArrowUp") {
+    commandHistoryIndex = Math.max(0, commandHistoryIndex - 1);
+    terminalInput.value = commandHistory[commandHistoryIndex];
+    return;
+  }
+
+  commandHistoryIndex = Math.min(commandHistory.length, commandHistoryIndex + 1);
+  terminalInput.value = commandHistoryIndex === commandHistory.length ? "" : commandHistory[commandHistoryIndex];
 });
 
 projectGrid.addEventListener("click", (event) => {
@@ -427,6 +497,20 @@ document.addEventListener("keydown", (event) => {
   }
 
   trapPanelFocus(event);
+});
+
+window.addEventListener("hashchange", () => {
+  const key = getOpenKeyFromUrl();
+  if (!key) {
+    if (panel.classList.contains("open")) {
+      closePanel({ updateUrl: false });
+    }
+    return;
+  }
+
+  if (projects[key]) {
+    openPanel(key, terminalInput, { updateUrl: false, focusPanel: false });
+  }
 });
 
 updateProjectMeta("local data");

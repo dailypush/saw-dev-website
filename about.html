@@ -17,13 +17,23 @@
     <header class="terminal-header">
       <div class="terminal-header-inner">
         <div class="prompt-label">saw.dev/about &gt;</div>
-        <div class="terminal-form" aria-hidden="true"></div>
+        <form id="about-terminal-form" class="terminal-form" autocomplete="off">
+          <label class="sr-only" for="about-terminal-input">About terminal command</label>
+          <input
+            id="about-terminal-input"
+            class="terminal-input"
+            type="text"
+            placeholder="type a command (help)"
+            spellcheck="false"
+          />
+        </form>
         <nav class="terminal-nav" aria-label="Primary">
           <a class="terminal-link" href="index.html">Home</a>
           <a class="terminal-link" href="index.html#fun-builds">Projects</a>
           <a class="terminal-link" href="about.html" aria-current="page">About</a>
         </nav>
       </div>
+      <div id="about-terminal-feedback" class="terminal-feedback" aria-live="polite" aria-atomic="true"></div>
     </header>
 
     <main id="about-content" class="about-page" tabindex="-1">
@@ -78,18 +88,80 @@
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="ripsaw-wheel" aria-hidden="true">
-          <pre class="ripsaw-ascii">
-  .-^-.
- /_o_o_\
-<\=|||=/>
- \_-_-_/
- RIP-SAW
-          </pre>
+          <div class="ripsaw-teeth">
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+            <span class="tooth"></span>
+          </div>
+          <div class="ripsaw-hub"></div>
         </div>
         <p class="footer-copy">
           Shipping practical tools, weird experiments, and clean developer workflows.
         </p>
       </div>
     </footer>
+
+    <script>
+      (function () {
+        const form = document.getElementById("about-terminal-form");
+        const input = document.getElementById("about-terminal-input");
+        const feedback = document.getElementById("about-terminal-feedback");
+
+        function setFeedback(message) {
+          feedback.textContent = message;
+        }
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+          const value = input.value.trim().toLowerCase();
+          if (!value) return;
+
+          if (value === "help") {
+            setFeedback("Commands: help, home, projects, contact, clear");
+            return;
+          }
+
+          if (value === "home") {
+            window.location.href = "index.html";
+            return;
+          }
+
+          if (value === "projects") {
+            window.location.href = "index.html#fun-builds";
+            return;
+          }
+
+          if (value === "contact") {
+            window.location.href = "mailto:hello@saw.dev";
+            return;
+          }
+
+          if (value === "clear") {
+            input.value = "";
+            setFeedback("");
+            return;
+          }
+
+          setFeedback('Unknown command. Try "help".');
+        });
+      })();
+    </script>
   </body>
 </html>

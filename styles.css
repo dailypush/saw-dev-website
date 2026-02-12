@@ -630,26 +630,65 @@ code,
 }
 
 .ripsaw-wheel {
-  width: 124px;
-  height: 124px;
+  width: 132px;
+  height: 132px;
   border-radius: 50%;
   border: 1px solid #3f5f8f;
-  background:
-    radial-gradient(circle at center, #152847 0 32%, #0f1c30 33% 100%),
-    linear-gradient(180deg, #172947, #0f1a2d);
+  background: radial-gradient(circle at center, #11223d 0 56%, #0f1c30 57% 100%);
   display: grid;
   place-items: center;
   box-shadow: 0 10px 24px #00000055, 0 0 18px #66c8ff22;
   animation: ripsaw-rotate 5.5s linear infinite;
+  position: relative;
 }
 
-.ripsaw-ascii {
-  margin: 0;
-  font-size: 0.55rem;
-  line-height: 1.05;
-  text-align: center;
-  color: #b8ddff;
-  text-shadow: 0 0 8px #69beff40;
+.ripsaw-teeth {
+  position: absolute;
+  inset: 0;
+}
+
+.ripsaw-teeth .tooth {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 13px solid #c2e4ff;
+  filter: drop-shadow(0 0 4px #7bc6ff55);
+  transform-origin: 0 0;
+}
+
+.ripsaw-teeth .tooth:nth-child(1) { transform: rotate(0deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(2) { transform: rotate(18deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(3) { transform: rotate(36deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(4) { transform: rotate(54deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(5) { transform: rotate(72deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(6) { transform: rotate(90deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(7) { transform: rotate(108deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(8) { transform: rotate(126deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(9) { transform: rotate(144deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(10) { transform: rotate(162deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(11) { transform: rotate(180deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(12) { transform: rotate(198deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(13) { transform: rotate(216deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(14) { transform: rotate(234deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(15) { transform: rotate(252deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(16) { transform: rotate(270deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(17) { transform: rotate(288deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(18) { transform: rotate(306deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(19) { transform: rotate(324deg) translateY(-62px); }
+.ripsaw-teeth .tooth:nth-child(20) { transform: rotate(342deg) translateY(-62px); }
+
+.ripsaw-hub {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid #4a79ad;
+  background:
+    radial-gradient(circle at center, #0d1d33 0 22%, #c1ddff 23% 30%, #17325a 31% 100%);
+  box-shadow: inset 0 0 16px #040a12, 0 0 10px #7bc6ff2e;
 }
 
 .footer-copy {

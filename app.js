@@ -1,39 +1,39 @@
 const PROJECTS = {
-  twitchbot: {
-    key: "twitchbot",
-    title: "Twitch Bot",
-    status: "Active Build",
+  outlookcheck: {
+    key: "outlookcheck",
+    title: "Outlook Recipient Check",
+    status: "Active",
     description:
-      "A chat-first bot toolkit for stream commands, alerts, and timed mini-events.",
-    why: "I wanted a clean bot playground where command logic is easy to test without a huge framework.",
-    stack: "Node.js, Twitch API, WebSocket events",
-    github: "https://github.com/yourname/twitchbot",
-    demo: "https://example.com/twitchbot",
-    note: "Next step: split moderation commands into plugins so each stream can load only what it needs."
+      "A lightweight Outlook add-in that checks email recipients for potential mistakes. It flags mixed domains and detects similarly named contacts on different domains to avoid misdirected emails.",
+    why: "Email mistakes can be costly. This add-in catches common errors before they happen by analyzing recipient patterns.",
+    stack: "TypeScript, Outlook SDK",
+    github: "https://github.com/Dailypush/OutlookRecipientCheck",
+    demo: null,
+    note: "Recently updated with enhanced recipient validation logic."
   },
-  candy: {
-    key: "candy",
-    title: "Candy Machine",
-    status: "Prototype",
+  minecraftinglive: {
+    key: "minecraftinglive",
+    title: "Minecrafting Live",
+    status: "Active",
     description:
-      "A goofy generator that remixes color palettes and names into fake candy brands.",
-    why: "It started as a design warmup and turned into a fast way to test token systems.",
-    stack: "Vanilla JS, CSS custom properties, static JSON",
-    github: "https://github.com/yourname/candy-machine",
-    demo: "https://example.com/candy",
-    note: "Needs a small persistence layer for saved favorites and local export."
+      "A Docker and Git-based hosting solution for Minecraft-related technologies. Streamlines deployment and management of multiple Minecraft services.",
+    why: "Managing Minecraft infrastructure manually is tedious. This project automates deployment and version control.",
+    stack: "JavaScript, Docker, Git",
+    github: "https://github.com/Dailypush/MinecraftingLive",
+    demo: null,
+    note: "Supports multiple service orchestration and automated backups."
   },
-  overlay: {
-    key: "overlay",
-    title: "Stream Overlay Lab",
-    status: "In Progress",
+  gominecraft: {
+    key: "gominecraft",
+    title: "Go Minecraft Stat Stream",
+    status: "Active",
     description:
-      "Browser-source overlays with scene toggles, score widgets, and low-latency animation hooks.",
-    why: "I wanted full control over overlay timing instead of hardcoding scenes in OBS every time.",
-    stack: "TypeScript, Canvas API, OBS browser source",
-    github: "https://github.com/yourname/overlay-lab",
-    demo: "https://example.com/overlay",
-    note: "Experimenting with a tiny event bus so widgets can sync without coupling."
+      "Combines Minecraft, statistics, and real-time streaming of data. Provides live insights into Minecraft server metrics and player activity.",
+    why: "Understanding server performance in real-time is crucial for managing a healthy Minecraft server.",
+    stack: "Go, WebSocket, Minecraft API",
+    github: "https://github.com/Dailypush/GoMinecraftStatStream",
+    demo: null,
+    note: "Features live monitoring dashboard with configurable metrics."
   }
 };
 

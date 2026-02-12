@@ -46,6 +46,7 @@ let projects = { ...LOCAL_PROJECTS };
 let lastPanelTrigger = null;
 const commandHistory = [];
 let commandHistoryIndex = -1;
+let bladeEngageTimer = null;
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -223,6 +224,16 @@ function openPanel(key, triggerEl, options = {}) {
   if (updateUrl) {
     setOpenKeyInUrl(project.key);
   }
+
+  document.body.classList.add("blade-engaged");
+  if (bladeEngageTimer) {
+    clearTimeout(bladeEngageTimer);
+  }
+  bladeEngageTimer = setTimeout(() => {
+    document.body.classList.remove("blade-engaged");
+    bladeEngageTimer = null;
+  }, 1100);
+
   feedback(`Opened ${project.key} in the right panel.`);
 }
 

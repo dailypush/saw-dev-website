@@ -452,6 +452,12 @@ code,
   border-top-right-radius: 11px;
 }
 
+.project-card.keyboard-active {
+  transform: translateY(-3px);
+  border-color: #68b9ff;
+  box-shadow: 0 16px 34px #00000052, 0 0 0 2px #68b9ff33;
+}
+
 .project-card:hover {
   transform: translateY(-4px);
   border-color: #42618f;
@@ -747,6 +753,47 @@ code,
   pointer-events: none;
 }
 
+
+.ripsaw-sparks {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.ripsaw-sparks .spark {
+  --a: 0deg;
+  --delay: 0ms;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #eff8ff;
+  box-shadow: 0 0 12px #b7e2ff, 0 0 20px #7fcfff88;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+.ripsaw-sparks .spark:nth-child(1) { --a: 8deg; --delay: 0ms; }
+.ripsaw-sparks .spark:nth-child(2) { --a: 36deg; --delay: 30ms; }
+.ripsaw-sparks .spark:nth-child(3) { --a: 78deg; --delay: 50ms; }
+.ripsaw-sparks .spark:nth-child(4) { --a: 125deg; --delay: 15ms; }
+.ripsaw-sparks .spark:nth-child(5) { --a: 188deg; --delay: 40ms; }
+.ripsaw-sparks .spark:nth-child(6) { --a: 228deg; --delay: 5ms; }
+.ripsaw-sparks .spark:nth-child(7) { --a: 278deg; --delay: 55ms; }
+.ripsaw-sparks .spark:nth-child(8) { --a: 325deg; --delay: 22ms; }
+
+body.blade-engaged .ripsaw-sparks .spark {
+  animation: spark-burst 560ms ease-out var(--delay) both;
+}
+
+.ripsaw-wheel:hover .ripsaw-sparks .spark,
+.ripsaw-wheel:focus-within .ripsaw-sparks .spark {
+  animation: spark-burst 680ms ease-out var(--delay) both;
+}
+
 .ripsaw-hub {
   position: absolute;
   left: 50%;
@@ -847,6 +894,20 @@ body.blade-engaged .ripsaw-wheel {
   }
 }
 
+@keyframes spark-burst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--a)) translateY(-64px) scale(0.45);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--a)) translateY(-108px) scale(1);
+  }
+}
+
 @keyframes ripsaw-sheen {
   from {
     transform: rotate(0deg);
@@ -902,8 +963,7 @@ body.blade-engaged .ripsaw-wheel {
   .ripsaw-teeth .tooth:nth-child(18) { transform: rotate(306deg) translateY(-59px); }
   .ripsaw-teeth .tooth:nth-child(19) { transform: rotate(324deg) translateY(-59px); }
   .ripsaw-teeth .tooth:nth-child(20) { transform: rotate(342deg) translateY(-59px); }
-
-  .ripsaw-hub {
+.ripsaw-hub {
     width: 36px;
     height: 36px;
   }
@@ -945,5 +1005,9 @@ body.blade-engaged .ripsaw-wheel {
 
   .ripsaw-sheen {
     animation: none;
+  }
+
+  .ripsaw-sparks .spark {
+    animation: none !important;
   }
 }

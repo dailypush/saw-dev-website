@@ -47,6 +47,7 @@ let lastPanelTrigger = null;
 const commandHistory = [];
 let commandHistoryIndex = -1;
 let bladeEngageTimer = null;
+let activeCardIndex = -1;
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -142,6 +143,48 @@ function updateProjectMeta(sourceLabel, syncedAt) {
   projectKeys.innerHTML = `Keys: ${keys.map((key) => `<code>${key}</code>`).join(", ")}`;
 }
 
+
+function getProjectCards() {
+  return Array.from(projectGrid.querySelectorAll(".project-card"));
+}
+
+function setActiveCard(index, options = {}) {
+  const { focus = false, scroll = false } = options;
+  const cards = getProjectCards();
+  if (!cards.length) {
+    activeCardIndex = -1;
+    return;
+  }
+
+  const clamped = Math.max(0, Math.min(index, cards.length - 1));
+  activeCardIndex = clamped;
+
+  cards.forEach((card, i) => {
+    card.classList.toggle("keyboard-active", i == clamped);
+    card.setAttribute("tabindex", i == clamped ? "0" : "-1");
+  });
+
+  const activeCard = cards[clamped];
+  if (focus) {
+    activeCard.focus();
+  }
+  if (scroll) {
+    activeCard.scrollIntoView({ behavior: smoothBehavior(), block: "nearest", inline: "nearest" });
+  }
+}
+
+function activateCardFromKeyboard() {
+  const cards = getProjectCards();
+  if (!cards.length || activeCardIndex < 0 || activeCardIndex >= cards.length) {
+    return;
+  }
+
+  const button = cards[activeCardIndex].querySelector(".card-open");
+  if (button) {
+    openPanel(button.dataset.key, cards[activeCardIndex]);
+  }
+}
+
 function renderProjectCards() {
   const allProjects = Object.values(projects);
   if (allProjects.length === 0) {
@@ -152,7 +195,7 @@ function renderProjectCards() {
   projectGrid.innerHTML = allProjects
     .map(
       (p) => `
-      <article class="project-card">
+      <article class="project-card" data-key="${p.key}">
         <span class="card-key">${p.key}</span>
         <h3>${p.title}</h3>
         <p>${p.description}</p>
@@ -172,6 +215,8 @@ function renderProjectCards() {
     `
     )
     .join("");
+
+  setActiveCard(0);
 }
 
 function feedback(message) {
@@ -495,6 +540,12 @@ projectGrid.addEventListener("click", (event) => {
     return;
   }
 
+  const card = button.closest(".project-card");
+  const cardIndex = getProjectCards().indexOf(card);
+  if (cardIndex >= 0) {
+    setActiveCard(cardIndex);
+  }
+
   openPanel(button.dataset.key, button);
 });
 
@@ -502,12 +553,48 @@ panelClose.addEventListener("click", closePanel);
 panelBackdrop.addEventListener("click", closePanel);
 
 document.addEventListener("keydown", (event) => {
+  const isTypingTarget =
+    event.target instanceof HTMLElement &&
+    (event.target.tagName === "INPUT" ||
+      event.target.tagName === "TEXTAREA" ||
+      event.target.tagName === "SELECT" ||
+      event.target.isContentEditable);
+
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    terminalInput.focus();
+    feedback("Quick command: help, open <key>, repos, fun, playground");
+    return;
+  }
+
   if (event.key === "Escape" && panel.classList.contains("open")) {
     closePanel();
     return;
   }
 
   trapPanelFocus(event);
+
+  if (!panel.classList.contains("open") && !isTypingTarget) {
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      event.preventDefault();
+      setActiveCard(activeCardIndex < 0 ? 0 : activeCardIndex + 1, { focus: true, scroll: true });
+      return;
+    }
+
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      event.preventDefault();
+      setActiveCard(activeCardIndex < 0 ? 0 : activeCardIndex - 1, { focus: true, scroll: true });
+      return;
+    }
+
+    if (event.key === "Enter") {
+      if (activeCardIndex >= 0) {
+        event.preventDefault();
+        activateCardFromKeyboard();
+      }
+      return;
+    }
+  }
 });
 
 window.addEventListener("hashchange", () => {

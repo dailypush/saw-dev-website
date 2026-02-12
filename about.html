@@ -112,6 +112,16 @@
           </div>
           <div class="ripsaw-cutouts"></div>
           <div class="ripsaw-sheen"></div>
+          <div class="ripsaw-sparks" aria-hidden="true">
+            <span class="spark"></span>
+            <span class="spark"></span>
+            <span class="spark"></span>
+            <span class="spark"></span>
+            <span class="spark"></span>
+            <span class="spark"></span>
+            <span class="spark"></span>
+            <span class="spark"></span>
+          </div>
           <div class="ripsaw-hub"></div>
         </div>
         <p class="footer-copy">
@@ -129,6 +139,14 @@
         function setFeedback(message) {
           feedback.textContent = message;
         }
+
+        document.addEventListener("keydown", function (event) {
+          if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+            event.preventDefault();
+            input.focus();
+            setFeedback("Quick command: help, home, projects, contact, clear");
+          }
+        });
 
         form.addEventListener("submit", function (event) {
           event.preventDefault();

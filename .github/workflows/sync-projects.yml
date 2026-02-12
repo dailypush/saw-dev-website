@@ -1,0 +1,77 @@
+name: Sync Projects Data
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate assets/projects.json
+        env:
+          GH_USER: Dailypush
+          MAX_REPOS: "8"
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          mkdir -p assets
+
+          now_utc="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          api_url="https://api.github.com/users/${GH_USER}/repos?sort=updated&per_page=100"
+
+          repos_json="$(curl -fsSL \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            "${api_url}")"
+
+          projects_json="$(
+            printf '%s' "${repos_json}" | jq --argjson max "${MAX_REPOS}" '
+              map(select(.fork | not))
+              | sort_by(.pushed_at)
+              | reverse
+              | .[:$max]
+              | map({
+                  key: (.name | ascii_downcase | gsub("[^a-z0-9]+"; "")),
+                  title: .name,
+                  status: "Active",
+                  description: (.description // "Public project synced from GitHub."),
+                  why: "Synced from repository metadata.",
+                  stack: (.language // "Not specified"),
+                  github: .html_url,
+                  demo: (if (.homepage // "") == "" then null else .homepage end),
+                  note: ("Last pushed " + (.pushed_at | split("T")[0]) + ".")
+                })
+            '
+          )"
+
+          jq -n \
+            --arg source "github-actions" \
+            --arg generated_at "${now_utc}" \
+            --argjson projects "${projects_json}" \
+            '{source: $source, generated_at: $generated_at, projects: $projects}' \
+            > assets/projects.json
+
+      - name: Commit updated data
+        run: |
+          set -euo pipefail
+
+          if git diff --quiet -- assets/projects.json; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/projects.json
+          git commit -m "chore: sync projects data"
+          git push

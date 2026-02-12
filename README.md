@@ -21,7 +21,13 @@ Open `index.html` directly in a browser.
 
 Project content now has two layers in `/Users/chadedwards/Projects/saw-dev-website/app.js`:
 
-- `GITHUB_SYNC`: controls public GitHub repo pull (username, included repos, key aliases, limits).
-- `LOCAL_PROJECTS`: local override copy for titles/descriptions/notes and fallback when GitHub is unavailable.
+- `LOCAL_PROJECTS`: local override copy for titles/descriptions/notes and fallback if sync data is unavailable.
+- `PROJECT_DATA_SOURCE`: points to `/Users/chadedwards/Projects/saw-dev-website/assets/projects.json`.
 
-Use terminal command `repos` in the site header to refresh from GitHub on demand.
+Repository sync now runs in GitHub Actions:
+
+- Workflow: `/Users/chadedwards/Projects/saw-dev-website/.github/workflows/sync-projects.yml`
+- Schedule: hourly (`17 * * * *`) and manual (`workflow_dispatch`)
+- Output: `/Users/chadedwards/Projects/saw-dev-website/assets/projects.json`
+
+Use terminal command `repos` in the site header to reload the generated JSON in the browser.

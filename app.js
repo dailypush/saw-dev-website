@@ -1,14 +1,6 @@
-const GITHUB_SYNC = {
-  enabled: true,
-  username: "Dailypush",
-  excludeForks: true,
-  maxRepos: 6,
-  includeRepos: [],
-  keyAliases: {
-    OutlookRecipientCheck: "outlookcheck",
-    MinecraftingLive: "minecraftinglive",
-    GoMinecraftStatStream: "gominecraft"
-  }
+const PROJECT_DATA_SOURCE = {
+  endpoint: "assets/projects.json",
+  label: "workflow sync"
 };
 
 const LOCAL_PROJECTS = {
@@ -236,79 +228,68 @@ function trapPanelFocus(event) {
   }
 }
 
-function normalizeRepoToProject(repo) {
-  const key = GITHUB_SYNC.keyAliases[repo.name] || repo.name.toLowerCase().replace(/[^a-z0-9]/g, "");
-  const local = LOCAL_PROJECTS[key];
+function normalizeProjectRecord(rawProject) {
+  const key = String(rawProject.key || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  if (!key) {
+    return null;
+  }
 
+  const local = LOCAL_PROJECTS[key] || {};
   return {
     key,
-    title: local?.title || repo.name,
-    status: local?.status || "Active",
-    description: local?.description || repo.description || "Public repository from GitHub.",
-    why: local?.why || "Synced from public GitHub repositories.",
-    stack: local?.stack || repo.language || "Not specified",
-    github: repo.html_url,
-    demo: local?.demo || repo.homepage || null,
-    note:
-      local?.note ||
-      `Last pushed ${new Date(repo.pushed_at).toLocaleDateString(undefined, {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      })}.`
+    title: local.title || rawProject.title || key,
+    status: local.status || rawProject.status || "Active",
+    description: local.description || rawProject.description || "Public project.",
+    why: local.why || rawProject.why || "Synced from repository metadata.",
+    stack: local.stack || rawProject.stack || "Not specified",
+    github: local.github || rawProject.github || null,
+    demo: local.demo || rawProject.demo || null,
+    note: local.note || rawProject.note || "Metadata updated by workflow sync."
   };
 }
 
-async function syncProjectsFromGitHub(showStatus = false) {
-  if (!GITHUB_SYNC.enabled) {
-    projects = { ...LOCAL_PROJECTS };
-    updateProjectMeta("local data");
-    renderProjectCards();
-    return;
+function useLocalProjects(sourceLabel, message) {
+  projects = { ...LOCAL_PROJECTS };
+  updateProjectMeta(sourceLabel);
+  renderProjectCards();
+  if (message) {
+    feedback(message);
   }
+}
 
+async function loadProjectsFromStaticData(showStatus = false) {
   if (showStatus) {
-    feedback(`Refreshing projects from GitHub user @${GITHUB_SYNC.username}...`);
+    feedback("Reloading projects from workflow data...");
   }
 
   try {
-    const response = await fetch(
-      `https://api.github.com/users/${encodeURIComponent(GITHUB_SYNC.username)}/repos?sort=updated&per_page=100`
-    );
-
+    const response = await fetch(`${PROJECT_DATA_SOURCE.endpoint}?v=${Date.now()}`, { cache: "no-store" });
     if (!response.ok) {
-      throw new Error(`GitHub API error: ${response.status}`);
+      throw new Error(`Data file unavailable (${response.status})`);
     }
 
-    const repos = await response.json();
-    const include = new Set(GITHUB_SYNC.includeRepos);
-
-    const filtered = repos
-      .filter((repo) => (GITHUB_SYNC.excludeForks ? !repo.fork : true))
-      .filter((repo) => (include.size ? include.has(repo.name) : true))
-      .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))
-      .slice(0, GITHUB_SYNC.maxRepos)
-      .map(normalizeRepoToProject);
-
-    if (!filtered.length) {
-      throw new Error("No repos matched the configured filters.");
+    const payload = await response.json();
+    const incoming = Array.isArray(payload) ? payload : payload.projects;
+    if (!Array.isArray(incoming) || incoming.length === 0) {
+      throw new Error("No projects in data payload.");
     }
 
-    projects = Object.fromEntries(filtered.map((project) => [project.key, project]));
-    updateProjectMeta(`GitHub @${GITHUB_SYNC.username}`);
+    const normalized = incoming.map(normalizeProjectRecord).filter(Boolean);
+    if (!normalized.length) {
+      throw new Error("No valid projects after normalization.");
+    }
+
+    projects = Object.fromEntries(normalized.map((project) => [project.key, project]));
+    const generatedAt = payload && payload.generated_at ? ` (${payload.generated_at})` : "";
+    const sourceLabel = payload && payload.source ? `${payload.source}${generatedAt}` : PROJECT_DATA_SOURCE.label;
+    updateProjectMeta(sourceLabel);
     renderProjectCards();
 
     if (showStatus) {
-      feedback(`Synced ${filtered.length} project(s) from GitHub.`);
+      feedback(`Loaded ${normalized.length} project(s) from workflow data.`);
     }
   } catch {
-    projects = { ...LOCAL_PROJECTS };
-    updateProjectMeta("local fallback (GitHub unavailable)");
-    renderProjectCards();
-
-    if (showStatus) {
-      feedback("GitHub sync failed. Using local project data.");
-    }
+    useLocalProjects("local fallback", showStatus ? "Using local project data (workflow file unavailable)." : "");
   }
 }
 
@@ -391,7 +372,7 @@ function handleCommand(rawInput) {
   }
 
   if (lower === "repos") {
-    syncProjectsFromGitHub(true);
+    loadProjectsFromStaticData(true);
     return;
   }
 
@@ -448,5 +429,5 @@ document.addEventListener("keydown", (event) => {
 
 updateProjectMeta("local data");
 renderProjectCards();
-syncProjectsFromGitHub(false);
+loadProjectsFromStaticData(false);
 runBootSequence();

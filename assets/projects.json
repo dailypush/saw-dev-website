@@ -1,6 +1,6 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-02-12T06:40:41Z",
+  "generated_at": "2026-02-12T07:37:49Z",
   "projects": [
     {
       "key": "sawdevwebsite",
@@ -8,7 +8,7 @@
       "status": "Active",
       "description": "Terminal-first static homepage for saw.dev with a boot animation, command-driven navigation, accessible interactions, and project detail panels.",
       "why": "A personal dev playground that doubles as a lightweight portfolio and experiment board.",
-      "stack": "JavaScript",
+      "stack": "CSS",
       "github": "https://github.com/dailypush/saw-dev-website",
       "demo": null,
       "note": "Last pushed 2026-02-12."

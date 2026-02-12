@@ -34,7 +34,9 @@ jobs:
             -H "Authorization: Bearer ${GITHUB_TOKEN}" \
             "${api_url}")"
 
-          projects_json="$(
+          overrides_json="$(cat assets/project-overrides.json 2>/dev/null || echo '[]')"
+
+          projects_json="$({
             printf '%s' "${repos_json}" | jq --argjson max "${MAX_REPOS}" '
               map(select(.fork | not))
               | sort_by(.pushed_at)
@@ -52,12 +54,26 @@ jobs:
                   note: ("Last pushed " + (.pushed_at | split("T")[0]) + ".")
                 })
             '
-          )"
+          })"
+
+          merged_projects_json="$({
+            jq -n \
+              --argjson projects "${projects_json}" \
+              --argjson overrides "${overrides_json}" \
+              '
+                $projects
+                | map(
+                    . as $p
+                    | ($overrides[]? | select(.key == $p.key)) as $override
+                    | if $override then ($p + $override) else $p end
+                  )
+              '
+          })"
 
           jq -n \
             --arg source "github-actions" \
             --arg generated_at "${now_utc}" \
-            --argjson projects "${projects_json}" \
+            --argjson projects "${merged_projects_json}" \
             '{source: $source, generated_at: $generated_at, projects: $projects}' \
             > assets/projects.json
 

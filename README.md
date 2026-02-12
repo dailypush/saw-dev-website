@@ -29,5 +29,6 @@ Repository sync now runs in GitHub Actions:
 - Workflow: `/Users/chadedwards/Projects/saw-dev-website/.github/workflows/sync-projects.yml`
 - Schedule: hourly (`17 * * * *`) and manual (`workflow_dispatch`)
 - Output: `/Users/chadedwards/Projects/saw-dev-website/assets/projects.json`
+- Description/metadata overrides: `/Users/chadedwards/Projects/saw-dev-website/assets/project-overrides.json` (matched by `key`)
 
 Use terminal command `repos` in the site header to reload the generated JSON in the browser.

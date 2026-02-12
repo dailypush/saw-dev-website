@@ -1,0 +1,37 @@
+[
+  {
+    "key": "sawdevwebsite",
+    "description": "Terminal-first static homepage for saw.dev with a boot animation, command-driven navigation, accessible interactions, and project detail panels.",
+    "why": "A personal dev playground that doubles as a lightweight portfolio and experiment board."
+  },
+  {
+    "key": "kioskmode",
+    "description": "PowerShell toolkit for locking down and managing Windows kiosk mode environments with repeatable setup and policy automation.",
+    "why": "Built to make kiosk deployments predictable, secure, and easier to troubleshoot."
+  },
+  {
+    "key": "pico8devcontainer",
+    "description": "Dev container setup for building and testing PICO-8 projects with consistent local tooling and reproducible environments.",
+    "why": "Eliminates machine-specific setup drift for tiny game projects and experiments."
+  },
+  {
+    "key": "moosestornadopotatoes",
+    "description": "Experimental sandbox repo for playful prototypes and rapid idea spikes.",
+    "why": "A low-pressure space to try weird ideas quickly before formalizing them."
+  },
+  {
+    "key": "platespotter",
+    "description": "TypeScript project for spotting and tracking license plates with a workflow optimized for quick checks and iteration.",
+    "why": "Created to explore lightweight computer-vision-adjacent tooling and practical data workflows."
+  },
+  {
+    "key": "gominecraftstatstream",
+    "description": "Go service that streams Minecraft server metrics in near real time for monitoring player activity and server health.",
+    "why": "Gives fast operational visibility into gameplay and performance without heavy infrastructure."
+  },
+  {
+    "key": "outlookrecipientcheck",
+    "description": "Outlook add-in that validates recipient patterns before send, detecting suspicious domain combinations and lookalike contacts.",
+    "why": "Reduces high-impact email mistakes with pre-send safety checks."
+  }
+]

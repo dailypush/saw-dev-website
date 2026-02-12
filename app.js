@@ -1,4 +1,17 @@
-const PROJECTS = {
+const GITHUB_SYNC = {
+  enabled: true,
+  username: "Dailypush",
+  excludeForks: true,
+  maxRepos: 6,
+  includeRepos: [],
+  keyAliases: {
+    OutlookRecipientCheck: "outlookcheck",
+    MinecraftingLive: "minecraftinglive",
+    GoMinecraftStatStream: "gominecraft"
+  }
+};
+
+const LOCAL_PROJECTS = {
   outlookcheck: {
     key: "outlookcheck",
     title: "Outlook Recipient Check",
@@ -37,6 +50,11 @@ const PROJECTS = {
   }
 };
 
+let projects = { ...LOCAL_PROJECTS };
+let lastPanelTrigger = null;
+
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
 const bootScreen = document.getElementById("boot-screen");
 const bootOutput = document.getElementById("boot-output");
 const progressWrap = document.getElementById("progress-wrap");
@@ -51,6 +69,8 @@ const terminalFeedback = document.getElementById("terminal-feedback");
 
 const playground = document.getElementById("playground");
 const projectGrid = document.getElementById("project-grid");
+const projectSource = document.getElementById("project-source");
+const projectKeys = document.getElementById("project-keys");
 const funBuilds = document.getElementById("fun-builds");
 
 const panel = document.getElementById("project-panel");
@@ -66,7 +86,6 @@ const panelDemo = document.getElementById("panel-demo");
 const panelNote = document.getElementById("panel-note");
 
 const bootLines = [
-  "$ ./launch playground",
   "[saw-core] loading runtime...",
   "[modules] resolving fun builds index...",
   "[net] loopback OK, external links deferred",
@@ -87,32 +106,24 @@ function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function runBootSequence() {
-  for (const line of bootLines) {
-    bootOutput.textContent += `${line}\n`;
-    await wait(280);
-  }
+function smoothBehavior() {
+  return prefersReducedMotion ? "auto" : "smooth";
+}
 
-  progressWrap.classList.remove("hidden");
-  await wait(120);
-  progressBar.style.width = "100%";
-  await wait(1250);
-
-  asciiLogo.textContent = ascii;
-  asciiLogo.classList.remove("hidden");
-
-  await wait(650);
-  bladeReveal.classList.remove("hidden");
-  await wait(1180);
-
-  bootScreen.classList.add("hidden");
-  terminalHeader.classList.remove("hidden");
-  playground.classList.remove("hidden");
-  terminalInput.focus();
+function updateProjectMeta(sourceLabel) {
+  const keys = Object.keys(projects);
+  projectSource.textContent = `Source: ${sourceLabel}`;
+  projectKeys.innerHTML = `Keys: ${keys.map((key) => `<code>${key}</code>`).join(", ")}`;
 }
 
 function renderProjectCards() {
-  projectGrid.innerHTML = Object.values(PROJECTS)
+  const allProjects = Object.values(projects);
+  if (allProjects.length === 0) {
+    projectGrid.innerHTML = "<p>No projects available yet.</p>";
+    return;
+  }
+
+  projectGrid.innerHTML = allProjects
     .map(
       (p) => `
       <article class="project-card">
@@ -120,7 +131,16 @@ function renderProjectCards() {
         <h3>${p.title}</h3>
         <p>${p.description}</p>
         <div class="card-actions">
-          <button class="card-open" data-key="${p.key}" type="button">Open details</button>
+          <button
+            class="card-open"
+            data-key="${p.key}"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="project-panel"
+            aria-label="Open details for ${p.title}"
+          >
+            Open details
+          </button>
         </div>
       </article>
     `
@@ -133,29 +153,45 @@ function feedback(message) {
 }
 
 function scrollToEl(el) {
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  el.scrollIntoView({ behavior: smoothBehavior(), block: "start" });
 }
 
-function openPanel(key) {
-  const project = PROJECTS[key?.toLowerCase()];
+function setLinkState(anchor, href) {
+  if (href) {
+    anchor.href = href;
+    anchor.removeAttribute("aria-disabled");
+    anchor.tabIndex = 0;
+  } else {
+    anchor.href = "#";
+    anchor.setAttribute("aria-disabled", "true");
+    anchor.tabIndex = -1;
+  }
+}
+
+function openPanel(key, triggerEl) {
+  const project = projects[key?.toLowerCase()];
   if (!project) {
-    feedback(`No project found for "${key}". Try: open twitchbot`);
+    const firstKey = Object.keys(projects)[0] || "help";
+    feedback(`No project found for "${key}". Try: open ${firstKey}`);
     return;
   }
+
+  lastPanelTrigger = triggerEl || document.activeElement;
 
   panelStatus.textContent = project.status;
   panelTitle.textContent = project.title;
   panelDescription.textContent = project.description;
   panelWhy.textContent = project.why;
   panelStack.textContent = project.stack;
-  panelGithub.href = project.github;
-  panelDemo.href = project.demo;
+  setLinkState(panelGithub, project.github);
+  setLinkState(panelDemo, project.demo);
   panelNote.textContent = project.note;
 
   panel.setAttribute("aria-hidden", "false");
   panel.classList.add("open");
   panelBackdrop.hidden = false;
   requestAnimationFrame(() => panelBackdrop.classList.add("visible"));
+  panelClose.focus();
   feedback(`Opened ${project.key} in the right panel.`);
 }
 
@@ -168,6 +204,165 @@ function closePanel() {
       panelBackdrop.hidden = true;
     }
   }, 240);
+
+  if (lastPanelTrigger && typeof lastPanelTrigger.focus === "function") {
+    lastPanelTrigger.focus();
+  }
+}
+
+function trapPanelFocus(event) {
+  if (!panel.classList.contains("open") || event.key !== "Tab") {
+    return;
+  }
+
+  const focusables = panel.querySelectorAll(
+    "button, [href]:not([aria-disabled='true']), input, select, textarea, [tabindex]:not([tabindex='-1'])"
+  );
+
+  if (focusables.length === 0) {
+    return;
+  }
+
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  const active = document.activeElement;
+
+  if (event.shiftKey && active === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && active === last) {
+    event.preventDefault();
+    first.focus();
+  }
+}
+
+function normalizeRepoToProject(repo) {
+  const key = GITHUB_SYNC.keyAliases[repo.name] || repo.name.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const local = LOCAL_PROJECTS[key];
+
+  return {
+    key,
+    title: local?.title || repo.name,
+    status: local?.status || "Active",
+    description: local?.description || repo.description || "Public repository from GitHub.",
+    why: local?.why || "Synced from public GitHub repositories.",
+    stack: local?.stack || repo.language || "Not specified",
+    github: repo.html_url,
+    demo: local?.demo || repo.homepage || null,
+    note:
+      local?.note ||
+      `Last pushed ${new Date(repo.pushed_at).toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      })}.`
+  };
+}
+
+async function syncProjectsFromGitHub(showStatus = false) {
+  if (!GITHUB_SYNC.enabled) {
+    projects = { ...LOCAL_PROJECTS };
+    updateProjectMeta("local data");
+    renderProjectCards();
+    return;
+  }
+
+  if (showStatus) {
+    feedback(`Refreshing projects from GitHub user @${GITHUB_SYNC.username}...`);
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.github.com/users/${encodeURIComponent(GITHUB_SYNC.username)}/repos?sort=updated&per_page=100`
+    );
+
+    if (!response.ok) {
+      throw new Error(`GitHub API error: ${response.status}`);
+    }
+
+    const repos = await response.json();
+    const include = new Set(GITHUB_SYNC.includeRepos);
+
+    const filtered = repos
+      .filter((repo) => (GITHUB_SYNC.excludeForks ? !repo.fork : true))
+      .filter((repo) => (include.size ? include.has(repo.name) : true))
+      .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))
+      .slice(0, GITHUB_SYNC.maxRepos)
+      .map(normalizeRepoToProject);
+
+    if (!filtered.length) {
+      throw new Error("No repos matched the configured filters.");
+    }
+
+    projects = Object.fromEntries(filtered.map((project) => [project.key, project]));
+    updateProjectMeta(`GitHub @${GITHUB_SYNC.username}`);
+    renderProjectCards();
+
+    if (showStatus) {
+      feedback(`Synced ${filtered.length} project(s) from GitHub.`);
+    }
+  } catch {
+    projects = { ...LOCAL_PROJECTS };
+    updateProjectMeta("local fallback (GitHub unavailable)");
+    renderProjectCards();
+
+    if (showStatus) {
+      feedback("GitHub sync failed. Using local project data.");
+    }
+  }
+}
+
+async function typeLaunchLine() {
+  bootOutput.textContent = "$ ";
+  const command = "./launch playground";
+
+  if (prefersReducedMotion) {
+    bootOutput.textContent += `${command}\n`;
+    return;
+  }
+
+  for (const char of command) {
+    bootOutput.textContent += char;
+    await wait(40);
+  }
+
+  bootOutput.textContent += "\n";
+}
+
+async function runBootSequence() {
+  await typeLaunchLine();
+
+  const lineDelay = prefersReducedMotion ? 0 : 240;
+  for (const line of bootLines) {
+    bootOutput.textContent += `${line}\n`;
+    if (lineDelay) {
+      await wait(lineDelay);
+    }
+  }
+
+  progressWrap.classList.remove("hidden");
+  if (!prefersReducedMotion) {
+    await wait(120);
+  }
+
+  progressBar.style.width = "100%";
+  if (!prefersReducedMotion) {
+    await wait(1200);
+  }
+
+  asciiLogo.textContent = ascii;
+  asciiLogo.classList.remove("hidden");
+
+  if (!prefersReducedMotion) {
+    await wait(500);
+    bladeReveal.classList.remove("hidden");
+    await wait(1180);
+  }
+
+  bootScreen.classList.add("hidden");
+  terminalHeader.classList.remove("hidden");
+  playground.classList.remove("hidden");
+  terminalInput.focus();
 }
 
 function handleCommand(rawInput) {
@@ -179,24 +374,29 @@ function handleCommand(rawInput) {
   const lower = input.toLowerCase();
 
   if (lower === "help") {
-    feedback("Commands: help, fun, playground, open <key>, clear, sudo make fun");
+    feedback("Commands: help, fun, playground, open <key>, repos, clear, sudo make fun");
     return;
   }
 
   if (lower === "fun") {
     scrollToEl(funBuilds);
-    feedback("Jumped to Fun Builds.");
+    feedback("Jumped to Projects.");
     return;
   }
 
   if (lower === "playground") {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: smoothBehavior() });
     feedback("Moved to top of playground.");
     return;
   }
 
+  if (lower === "repos") {
+    syncProjectsFromGitHub(true);
+    return;
+  }
+
   if (lower === "clear") {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: smoothBehavior() });
     terminalFeedback.textContent = "";
     terminalInput.value = "";
     return;
@@ -210,10 +410,10 @@ function handleCommand(rawInput) {
   if (lower.startsWith("open ")) {
     const key = input.slice(5).trim();
     if (!key) {
-      feedback("Usage: open <key>  (example: open overlay)");
+      feedback("Usage: open <key>  (example: open outlookcheck)");
       return;
     }
-    openPanel(key);
+    openPanel(key, terminalInput);
     return;
   }
 
@@ -230,7 +430,8 @@ projectGrid.addEventListener("click", (event) => {
   if (!button) {
     return;
   }
-  openPanel(button.dataset.key);
+
+  openPanel(button.dataset.key, button);
 });
 
 panelClose.addEventListener("click", closePanel);
@@ -239,8 +440,13 @@ panelBackdrop.addEventListener("click", closePanel);
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && panel.classList.contains("open")) {
     closePanel();
+    return;
   }
+
+  trapPanelFocus(event);
 });
 
+updateProjectMeta("local data");
 renderProjectCards();
+syncProjectsFromGitHub(false);
 runBootSequence();

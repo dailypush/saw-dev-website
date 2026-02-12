@@ -36,6 +36,22 @@ body {
   line-height: 1.5;
 }
 
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.45rem 0.65rem;
+  border-radius: 8px;
+  background: #0e2238;
+  color: #d8ecff;
+  border: 1px solid #456a96;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
 code,
 .terminal-input,
 .prompt-label,
@@ -292,6 +308,16 @@ code,
   color: var(--ink-1);
 }
 
+.project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+#project-source {
+  color: #8ec0ea;
+}
+
 .project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -382,6 +408,14 @@ code,
 
 .card-open:hover {
   background: #14315a;
+}
+
+.card-open:focus-visible,
+.panel-close:focus-visible,
+.panel-links a:focus-visible,
+.terminal-input:focus-visible {
+  outline: 2px solid #7ed6ff;
+  outline-offset: 2px;
 }
 
 .panel-backdrop {
@@ -479,6 +513,12 @@ code,
   color: #a9ddff;
 }
 
+.panel-links a[aria-disabled="true"] {
+  color: #6f8198;
+  text-decoration: line-through;
+  pointer-events: none;
+}
+
 .dev-note {
   border-left: 2px solid #3f628f;
   padding-left: 0.65rem;
@@ -536,5 +576,19 @@ code,
 
   .ascii-logo {
     font-size: 0.7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

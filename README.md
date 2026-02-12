@@ -19,5 +19,9 @@ Open `index.html` directly in a browser.
 
 ## Content updates
 
-Project card and panel content live in one object in `app.js`: `PROJECTS`.
-Update links and copy there to refresh cards + panel details.
+Project content now has two layers in `/Users/chadedwards/Projects/saw-dev-website/app.js`:
+
+- `GITHUB_SYNC`: controls public GitHub repo pull (username, included repos, key aliases, limits).
+- `LOCAL_PROJECTS`: local override copy for titles/descriptions/notes and fallback when GitHub is unavailable.
+
+Use terminal command `repos` in the site header to refresh from GitHub on demand.

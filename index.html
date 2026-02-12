@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#playground">Skip to content</a>
+
     <div id="boot-screen" class="boot-screen" aria-live="polite">
       <div class="terminal-window" role="status" aria-label="Boot terminal">
         <div class="terminal-titlebar">
@@ -49,10 +51,15 @@
           />
         </form>
       </div>
-      <div id="terminal-feedback" class="terminal-feedback" aria-live="polite"></div>
+      <div
+        id="terminal-feedback"
+        class="terminal-feedback"
+        aria-live="polite"
+        aria-atomic="true"
+      ></div>
     </header>
 
-    <main id="playground" class="playground hidden">
+    <main id="playground" class="playground hidden" tabindex="-1">
       <section class="hero" id="top">
         <p class="hero-kicker">terminal-first dev playground</p>
         <h1>Welcome to saw.dev</h1>
@@ -65,10 +72,15 @@
       <section id="fun-builds" class="section">
         <div class="section-head">
           <h2>💻 Projects</h2>
-          <p>Keys: <code>outlookcheck</code>, <code>minecraftinglive</code>, <code>gominecraft</code></p>
+          <p id="project-meta" class="project-meta">
+            <span id="project-source">Source: local data</span>
+            <span id="project-keys">
+              Keys: <code>outlookcheck</code>, <code>minecraftinglive</code>, <code>gominecraft</code>
+            </span>
+          </p>
         </div>
 
-        <div id="project-grid" class="project-grid"></div>
+        <div id="project-grid" class="project-grid" aria-live="polite"></div>
       </section>
     </main>
 
@@ -76,8 +88,12 @@
     <aside
       id="project-panel"
       class="project-panel"
+      role="dialog"
+      aria-modal="true"
       aria-hidden="true"
       aria-labelledby="panel-title"
+      aria-describedby="panel-description"
+      tabindex="-1"
     >
       <button id="panel-close" class="panel-close" type="button" aria-label="Close panel">
         ×

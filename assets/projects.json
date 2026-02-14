@@ -1,18 +1,7 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-02-14T21:28:12Z",
+  "generated_at": "2026-02-14T22:27:51Z",
   "projects": [
-    {
-      "key": "moosestornadopotatoes",
-      "title": "moosestornadopotatoes",
-      "status": "Active",
-      "description": "Experimental sandbox repo for playful prototypes and rapid idea spikes.",
-      "why": "A low-pressure space to try weird ideas quickly before formalizing them.",
-      "stack": "Not specified",
-      "github": "https://github.com/dailypush/moosestornadopotatoes",
-      "demo": null,
-      "note": "Last pushed 2026-02-14."
-    },
     {
       "key": "sawdevwebsite",
       "title": "saw-dev-website",
@@ -21,6 +10,17 @@
       "why": "A personal dev playground that doubles as a lightweight portfolio and experiment board.",
       "stack": "CSS",
       "github": "https://github.com/dailypush/saw-dev-website",
+      "demo": null,
+      "note": "Last pushed 2026-02-14."
+    },
+    {
+      "key": "moosestornadopotatoes",
+      "title": "moosestornadopotatoes",
+      "status": "Active",
+      "description": "Experimental sandbox repo for playful prototypes and rapid idea spikes.",
+      "why": "A low-pressure space to try weird ideas quickly before formalizing them.",
+      "stack": "Not specified",
+      "github": "https://github.com/dailypush/moosestornadopotatoes",
       "demo": null,
       "note": "Last pushed 2026-02-14."
     },

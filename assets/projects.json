@@ -1,6 +1,6 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-02-17T03:17:07Z",
+  "generated_at": "2026-02-17T04:57:29Z",
   "projects": [
     {
       "key": "sawdevwebsite",
@@ -67,17 +67,6 @@
       "github": "https://github.com/dailypush/PlateSpotter",
       "demo": "replit.com/@chader144/PlateSpotter",
       "note": "Last pushed 2025-10-13."
-    },
-    {
-      "key": "gominecraftstatstream",
-      "title": "GoMinecraftStatStream",
-      "status": "Active",
-      "description": "Go service that streams Minecraft server metrics in near real time for monitoring player activity and server health.",
-      "why": "Gives fast operational visibility into gameplay and performance without heavy infrastructure.",
-      "stack": "Go",
-      "github": "https://github.com/dailypush/GoMinecraftStatStream",
-      "demo": null,
-      "note": "Last pushed 2025-08-27."
     }
   ]
 }

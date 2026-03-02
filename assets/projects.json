@@ -1,6 +1,6 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-03-02T05:39:21Z",
+  "generated_at": "2026-03-02T06:36:32Z",
   "projects": [
     {
       "key": "sawdevwebsite",
@@ -56,17 +56,6 @@
       "github": "https://github.com/dailypush/OutlookRecipientCheck",
       "demo": null,
       "note": "Last pushed 2025-12-09."
-    },
-    {
-      "key": "platespotter",
-      "title": "PlateSpotter",
-      "status": "Active",
-      "description": "TypeScript project for spotting and tracking license plates with a workflow optimized for quick checks and iteration.",
-      "why": "Created to explore lightweight computer-vision-adjacent tooling and practical data workflows.",
-      "stack": "TypeScript",
-      "github": "https://github.com/dailypush/PlateSpotter",
-      "demo": "replit.com/@chader144/PlateSpotter",
-      "note": "Last pushed 2025-10-13."
     }
   ]
 }

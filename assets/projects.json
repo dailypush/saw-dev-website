@@ -1,7 +1,18 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-05-17T01:17:53Z",
+  "generated_at": "2026-05-17T03:28:14Z",
   "projects": [
+    {
+      "key": "sawdevwebsite",
+      "title": "saw-dev-website",
+      "status": "Active",
+      "description": "Terminal-first static homepage for saw.dev with a boot animation, command-driven navigation, accessible interactions, and project detail panels.",
+      "why": "A personal dev playground that doubles as a lightweight portfolio and experiment board.",
+      "stack": "CSS",
+      "github": "https://github.com/dailypush/saw-dev-website",
+      "demo": null,
+      "note": "Last pushed 2026-05-17."
+    },
     {
       "key": "moosestornadopotatoes",
       "title": "moosestornadopotatoes",
@@ -12,17 +23,6 @@
       "github": "https://github.com/dailypush/moosestornadopotatoes",
       "demo": null,
       "note": "Last pushed 2026-05-17."
-    },
-    {
-      "key": "sawdevwebsite",
-      "title": "saw-dev-website",
-      "status": "Active",
-      "description": "Terminal-first static homepage for saw.dev with a boot animation, command-driven navigation, accessible interactions, and project detail panels.",
-      "why": "A personal dev playground that doubles as a lightweight portfolio and experiment board.",
-      "stack": "CSS",
-      "github": "https://github.com/dailypush/saw-dev-website",
-      "demo": null,
-      "note": "Last pushed 2026-05-16."
     },
     {
       "key": "kioskmode",

@@ -1,6 +1,6 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-06-06T18:44:41Z",
+  "generated_at": "2026-06-06T19:48:19Z",
   "projects": [
     {
       "key": "sawdevwebsite",
@@ -45,17 +45,6 @@
       "github": "https://github.com/dailypush/pico8-devcontainer",
       "demo": null,
       "note": "Last pushed 2025-12-12."
-    },
-    {
-      "key": "outlookrecipientcheck",
-      "title": "OutlookRecipientCheck",
-      "status": "Active",
-      "description": "Outlook add-in that validates recipient patterns before send, detecting suspicious domain combinations and lookalike contacts.",
-      "why": "Reduces high-impact email mistakes with pre-send safety checks.",
-      "stack": "TypeScript",
-      "github": "https://github.com/dailypush/OutlookRecipientCheck",
-      "demo": null,
-      "note": "Last pushed 2025-12-09."
     }
   ]
 }

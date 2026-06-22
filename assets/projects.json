@@ -1,6 +1,6 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-06-22T03:29:29Z",
+  "generated_at": "2026-06-22T06:09:10Z",
   "projects": [
     {
       "key": "sawdevwebsite",
@@ -34,17 +34,6 @@
       "github": "https://github.com/dailypush/KioskMode",
       "demo": null,
       "note": "Last pushed 2025-12-19."
-    },
-    {
-      "key": "pico8devcontainer",
-      "title": "pico8-devcontainer",
-      "status": "Active",
-      "description": "Dev container setup for building and testing PICO-8 projects with consistent local tooling and reproducible environments.",
-      "why": "Eliminates machine-specific setup drift for tiny game projects and experiments.",
-      "stack": "Shell",
-      "github": "https://github.com/dailypush/pico8-devcontainer",
-      "demo": null,
-      "note": "Last pushed 2025-12-12."
     }
   ]
 }

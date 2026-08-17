@@ -1,7 +1,18 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-08-17T11:27:21Z",
+  "generated_at": "2026-08-17T12:29:03Z",
   "projects": [
+    {
+      "key": "gominecraftstatstream",
+      "title": "GoMinecraftStatStream",
+      "status": "Active",
+      "description": "Go service that streams Minecraft server metrics in near real time for monitoring player activity and server health.",
+      "why": "Gives fast operational visibility into gameplay and performance without heavy infrastructure.",
+      "stack": "Go",
+      "github": "https://github.com/dailypush/GoMinecraftStatStream",
+      "demo": null,
+      "note": "Last pushed 2026-08-17."
+    },
     {
       "key": "sawdevwebsite",
       "title": "saw-dev-website",
@@ -23,17 +34,6 @@
       "github": "https://github.com/dailypush/moosestornadopotatoes",
       "demo": null,
       "note": "Last pushed 2026-06-11."
-    },
-    {
-      "key": "kioskmode",
-      "title": "KioskMode",
-      "status": "Active",
-      "description": "PowerShell toolkit for locking down and managing Windows kiosk mode environments with repeatable setup and policy automation.",
-      "why": "Built to make kiosk deployments predictable, secure, and easier to troubleshoot.",
-      "stack": "PowerShell",
-      "github": "https://github.com/dailypush/KioskMode",
-      "demo": null,
-      "note": "Last pushed 2025-12-19."
     }
   ]
 }

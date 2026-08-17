@@ -1,18 +1,7 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-08-17T12:29:03Z",
+  "generated_at": "2026-08-17T13:30:01Z",
   "projects": [
-    {
-      "key": "gominecraftstatstream",
-      "title": "GoMinecraftStatStream",
-      "status": "Active",
-      "description": "Go service that streams Minecraft server metrics in near real time for monitoring player activity and server health.",
-      "why": "Gives fast operational visibility into gameplay and performance without heavy infrastructure.",
-      "stack": "Go",
-      "github": "https://github.com/dailypush/GoMinecraftStatStream",
-      "demo": null,
-      "note": "Last pushed 2026-08-17."
-    },
     {
       "key": "sawdevwebsite",
       "title": "saw-dev-website",
@@ -21,6 +10,17 @@
       "why": "A personal dev playground that doubles as a lightweight portfolio and experiment board.",
       "stack": "CSS",
       "github": "https://github.com/dailypush/saw-dev-website",
+      "demo": null,
+      "note": "Last pushed 2026-08-17."
+    },
+    {
+      "key": "gominecraftstatstream",
+      "title": "GoMinecraftStatStream",
+      "status": "Active",
+      "description": "Go service that streams Minecraft server metrics in near real time for monitoring player activity and server health.",
+      "why": "Gives fast operational visibility into gameplay and performance without heavy infrastructure.",
+      "stack": "Go",
+      "github": "https://github.com/dailypush/GoMinecraftStatStream",
       "demo": null,
       "note": "Last pushed 2026-08-17."
     },

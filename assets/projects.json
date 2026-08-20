@@ -1,7 +1,18 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-08-20T11:27:24Z",
+  "generated_at": "2026-08-20T12:29:14Z",
   "projects": [
+    {
+      "key": "gominecraftstatstream",
+      "title": "GoMinecraftStatStream",
+      "status": "Active",
+      "description": "Go service that streams Minecraft server metrics in near real time for monitoring player activity and server health.",
+      "why": "Gives fast operational visibility into gameplay and performance without heavy infrastructure.",
+      "stack": "Go",
+      "github": "https://github.com/dailypush/GoMinecraftStatStream",
+      "demo": null,
+      "note": "Last pushed 2026-08-20."
+    },
     {
       "key": "sawdevwebsite",
       "title": "saw-dev-website",
@@ -12,17 +23,6 @@
       "github": "https://github.com/dailypush/saw-dev-website",
       "demo": null,
       "note": "Last pushed 2026-08-20."
-    },
-    {
-      "key": "gominecraftstatstream",
-      "title": "GoMinecraftStatStream",
-      "status": "Active",
-      "description": "Go service that streams Minecraft server metrics in near real time for monitoring player activity and server health.",
-      "why": "Gives fast operational visibility into gameplay and performance without heavy infrastructure.",
-      "stack": "Go",
-      "github": "https://github.com/dailypush/GoMinecraftStatStream",
-      "demo": null,
-      "note": "Last pushed 2026-08-17."
     },
     {
       "key": "moosestornadopotatoes",

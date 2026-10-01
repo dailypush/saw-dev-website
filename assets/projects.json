@@ -1,6 +1,6 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-10-01T18:36:42Z",
+  "generated_at": "2026-10-01T19:27:15Z",
   "projects": [
     {
       "key": "sawdevwebsite",
@@ -23,17 +23,6 @@
       "github": "https://github.com/dailypush/pico8-devcontainer",
       "demo": null,
       "note": "Last pushed 2026-09-09."
-    },
-    {
-      "key": "gominecraftstatstream",
-      "title": "GoMinecraftStatStream",
-      "status": "Active",
-      "description": "Go service that streams Minecraft server metrics in near real time for monitoring player activity and server health.",
-      "why": "Gives fast operational visibility into gameplay and performance without heavy infrastructure.",
-      "stack": "Go",
-      "github": "https://github.com/dailypush/GoMinecraftStatStream",
-      "demo": null,
-      "note": "Last pushed 2026-08-20."
     }
   ]
 }

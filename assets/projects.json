@@ -1,7 +1,18 @@
 {
   "source": "github-actions",
-  "generated_at": "2026-10-07T23:26:46Z",
+  "generated_at": "2026-10-08T01:08:24Z",
   "projects": [
+    {
+      "key": "moosestornadopotatoes",
+      "title": "moosestornadopotatoes",
+      "status": "Active",
+      "description": "Experimental sandbox repo for playful prototypes and rapid idea spikes.",
+      "why": "A low-pressure space to try weird ideas quickly before formalizing them.",
+      "stack": "Python",
+      "github": "https://github.com/dailypush/moosestornadopotatoes",
+      "demo": null,
+      "note": "Last pushed 2026-10-08."
+    },
     {
       "key": "sawdevwebsite",
       "title": "saw-dev-website",
